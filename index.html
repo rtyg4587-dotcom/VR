@@ -148,8 +148,9 @@ footer{text-align:center;font-size:.62rem;color:var(--dim);padding:8px 16px 20px
   </div>
 
   <div id="dashEmpty" class="empty" style="display:none">
-    아직 기록이 없습니다.<br>설정 탭에서 파라미터를 확인한 뒤<br><b>첫 매수(0회차)</b>를 기록하세요.
-    <div style="margin-top:16px"><button class="btn-ghost btn-sm" onclick="go('set')">설정으로 이동</button></div>
+    아직 기록이 없습니다.<br>아래에 <b>첫 매수(0회차)</b>를 기록하면 시작됩니다.<br>
+    <span style="font-size:.75rem;color:var(--dim)">시작금액·적립금 등 파라미터는 설정 탭에서 먼저 확인하세요.</span>
+    <div style="margin-top:14px"><button class="btn-ghost btn-sm" onclick="go('set')">설정 확인</button></div>
   </div>
 
   <div id="dashBody">
@@ -187,6 +188,7 @@ footer{text-align:center;font-size:.62rem;color:var(--dim);padding:8px 16px 20px
     </div>
     <div class="hint" id="paramLine"></div>
   </div>
+  </div>
 
   <div class="card">
     <h2>이번 회차 기록 <span class="r" id="pendWk"></span></h2>
@@ -198,7 +200,6 @@ footer{text-align:center;font-size:.62rem;color:var(--dim);padding:8px 16px 20px
     </div>
     <button class="btn-gold" onclick="finalize()">회차 확정</button>
     <div class="hint" id="pendHint"></div>
-  </div>
   </div>
 </section>
 
@@ -455,6 +456,11 @@ function render(){
   document.getElementById('dashBody').style.display=has?'block':'none';
   renderAllCard(cp);
   if(has){renderDash(comp,pd,cp);renderLadder(pd,cp);}
+  else{
+    document.getElementById('pendWk').textContent='0주차 · 첫 매수';
+    document.getElementById('pendHint').innerHTML=`시작금액 $${fmt(+s.startCash,0)} 중 첫 매수분을 기록하세요. 예: 종가 84.00에 5주 매수 → 개수 <b>5</b>, 거래액 <b>-420</b> (매수는 음수). 확정하면 V·밴드·사다리가 생성됩니다.`;
+    renderLadder(null,cp);
+  }
   renderRecords(comp);
   renderSheet(comp,pd);
   renderCharts(comp);
