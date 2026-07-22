@@ -1,0 +1,21 @@
+name: Update TQQQ price
+on:
+  schedule:
+    - cron: '30 21 * * 1-5'   # 평일 21:30 UTC = 미국장 마감 직후 (KST 06:30)
+    - cron: '30 13 * * 1-5'   # 장중 참고용 1회 (KST 22:30)
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 fetch_tqqq.py
+      - name: Commit
+        run: |
+          git config user.name "vr-bot"
+          git config user.email "actions@github.com"
+          git add tqqq.json
+          git diff --cached --quiet || git commit -m "price update"
+          git push
